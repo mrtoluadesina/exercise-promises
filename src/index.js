@@ -168,12 +168,21 @@ async function driverReport() {
 
   try {
     for (let [key, value] of driverDetails) {
-      let driverBio = await getDriver(key);
-      let {name, phone, vehicleID } = driverBio;
+      let {name, phone, vehicleID } = await getDriver(key);
       value['fullName'] = name;
       value['phone'] = phone;
       value['noOfVehicles'] = vehicleID.length;
       value['vehicleID'] = vehicleID;
+
+      let vehicleDetails = [];
+      for (let id of value.vehicleID) {
+        let { plate, manufacturer } = await getVehicle(id);
+        let details = {
+          "plate": plate,
+          "manufacturer": manufacturer
+        }
+        vehicleDetails.push(details);
+      }
 
       //Structure Output
       let driver = {};
@@ -182,12 +191,12 @@ async function driverReport() {
       driver.phone = value.phone;
       driver.noOfTrips = value.noOfCashTrips + value.noOfNonCashTrips;
       driver.noOfVehicles = value.noOfVehicles;
-      // driver.vehicles = something
+      driver.vehicles = vehicleDetails;
       driver.noOfCashTrips = value.noOfCashTrips;
       driver.noOfNonCashTrips = value.noOfNonCashTrips;
-      driver.totalAmountEarned = value.cashAmountEarned + value.nonCashAmountEarned;
-      driver.totalCashAmount = value.cashAmountEarned;
-      driver.totalNonCashAmount = value.nonCashAmountEarned;
+      driver.totalAmountEarned = Number(value.cashAmountEarned.toFixed(2)) + Number(value.nonCashAmountEarned.toFixed(2));
+      driver.totalCashAmount = Number(value.cashAmountEarned.toFixed(2));
+      driver.totalNonCashAmount = Number(value.nonCashAmountEarned.toFixed(2));
       driver.trips = value.trips;
 
     //push into report
@@ -195,8 +204,8 @@ async function driverReport() {
     }
   } catch (err) {}
 
-  console.log(report);
-  // return report
+  // console.log(report);
+  return report
 }
-driverReport();
+driverReport()
 module.exports = { analysis, driverReport };
