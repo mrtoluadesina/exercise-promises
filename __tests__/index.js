@@ -74,17 +74,18 @@ describe('driverReport spec', () => {
     });
   });
 
-  // test('driverReport solution', async () => {
-  //   const data = await driverReport();
-
-  //   expect(data).toMatchObject({
-  //     noOfCashTrips: 26,
-  //     noOfNonCashTrips: 24,
-  //     billedTotal: 128224.69,
-  //     cashBilledTotal: 69043.8,
-  //     nonCashBilledTotal: 59180.89
-  //   });
-  // });
+  test('driverReport solution', async () => {
+    const data = await driverReport();
+    expect(data).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        fullName: 'Kate Carpenter',
+        id: '3539a692-69b6-4b24-89fc-f8b505a1eecd',
+        phone: '+234 809-435-9539',
+        noOfTrips: 1,
+        noOfVehicles: 2,
+      })
+    ]));
+  });
 });
 
 describe('My own tests go here - I should update this description', () => {
