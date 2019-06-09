@@ -41,10 +41,10 @@ describe('analysis spec', () => {
   });
 });
 
-describe('driver report array to have length of drivers Api', () => {
-  test('expects this to return 10', async () => {
+describe('driver report array to have length of drivers Api with correct ID', () => {
+  test('expects this to return 9', async () => {
     let result = await driverReport();
-    expect(result.length).toHaveLength(10);
+    expect(result.length).toHaveLength(9);
   });
 });
 
