@@ -41,10 +41,50 @@ describe('analysis spec', () => {
   });
 });
 
-describe('driver report', () => {
-  test('matches the required data format', async () => {
-    await expect('todo').toBe('todo');
+describe('driver report array to have length of drivers Api with correct ID', () => {
+  test('expects this to return 9', async () => {
+    let result = await driverReport();
+    expect(result).toHaveLength(9);
   });
+});
+
+describe('driver report to be defined', () => {
+  test('expects driverReport to be defined', async () => {
+    await expect(driverReport).toBeDefined();
+  });
+});
+
+describe('driverReport spec', () => {
+  test('matches the required data format', async () => {
+    const data = await driverReport();
+
+    expect(data).toContainEqual({
+      fullName: expect.any(String),
+      id: expect.any(String),
+      phone: expect.any(String),
+      noOfTrips: expect.any(Number),
+      noOfVehicles: expect.any(Number),
+      vehicles: expect.any(Array),
+      noOfCashTrips: expect.any(Number),
+      noOfNonCashTrips: expect.any(Number),
+      totalAmountEarned: expect.any(Number),
+      totalCashAmount: expect.any(Number),
+      totalNonCashAmount: expect.any(Number),
+      trips: expect.any(Array)
+    });
+  });
+
+  // test('driverReport solution', async () => {
+  //   const data = await driverReport();
+
+  //   expect(data).toMatchObject({
+  //     noOfCashTrips: 26,
+  //     noOfNonCashTrips: 24,
+  //     billedTotal: 128224.69,
+  //     cashBilledTotal: 69043.8,
+  //     nonCashBilledTotal: 59180.89
+  //   });
+  // });
 });
 
 describe('My own tests go here - I should update this description', () => {
