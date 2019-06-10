@@ -83,6 +83,11 @@ describe('driverReport spec', () => {
         phone: '+234 809-435-9539',
         noOfTrips: 1,
         noOfVehicles: 2,
+        noOfCashTrips: 0,
+        noOfNonCashTrips: 1,
+        totalAmountEarned: 4516.75,
+        totalCashAmount: 0,
+        totalNonCashAmount: 4516.75,
       })
     ]));
   });
