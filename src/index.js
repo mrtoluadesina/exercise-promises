@@ -45,15 +45,12 @@ async function analysis() {
   let nonCashBilledTotal = Number(billedTotal.toFixed(2)) - cashBilledTotal;
 
   // get number of drivers with more than one vehicle
-  let count = 0;
-  try {
-    for (let driver of uniqueDriverID.values()) {
-      const driverData = await getDriver(driver);
-      if (driverData.vehicleID.length > 1) count++;
-    }
-  } catch (error) {}
-
-  let noOfDriversWithMoreThanOneVehicle = count;
+  let noOfDriversWithMoreThanOneVehicle = 0;
+  for (let driver of uniqueDriverID.values()) {
+    getDriver(driver).then(data => {
+      if(data.vehicleID.length > 1) noOfDriversWithMoreThanOneVehicle++;
+    }).catch(err => {});
+  }
 
   // get the most trips by a driver
   const driverArray = [...drivers];
@@ -89,6 +86,7 @@ async function analysis() {
     highestEarningDriver: highestEarningDriver
   };
 }
+analysis()
 /**
  * This function should return the data for drivers in the specified format
  * Don't forget to write tests
@@ -166,40 +164,76 @@ async function driverReport() {
     }
   });
 
-  try {
-    for (let [key, value] of driverDetails) {
-      const { name, phone, vehicleID } = await getDriver(key);
+  // try {
+  //   for (let [key, value] of driverDetails) {
+  //     const { name, phone, vehicleID } = await getDriver(key);
+  //     const vehicleDetails = [];
+  //     for (let id of vehicleID) {
+  //       const { plate, manufacturer } = await getVehicle(id);
+  //       const details = {
+  //         plate: plate,
+  //         manufacturer: manufacturer
+  //       };
+  //       vehicleDetails.push(details);
+  //     }
+
+  //     //Structure Output
+  //     const driver = {};
+  //     driver.fullName = name;
+  //     driver.id = key;
+  //     driver.phone = phone;
+  //     driver.noOfTrips = value.noOfCashTrips + value.noOfNonCashTrips;
+  //     driver.noOfVehicles = vehicleID.length;
+  //     driver.vehicles = vehicleDetails;
+  //     driver.noOfCashTrips = value.noOfCashTrips;
+  //     driver.noOfNonCashTrips = value.noOfNonCashTrips;
+  //     driver.totalAmountEarned =
+  //       Number(value.cashAmountEarned.toFixed(2)) +
+  //       Number(value.nonCashAmountEarned.toFixed(2));
+  //     driver.totalCashAmount = Number(value.cashAmountEarned.toFixed(2));
+  //     driver.totalNonCashAmount = Number(value.nonCashAmountEarned.toFixed(2));
+  //     driver.trips = value.trips;
+
+  //     //push into report
+  //     report.push(driver);
+  //   }
+  // } catch (err) {}
+  for (let [key, value] of driverDetails) {
+    getDriver(key).then(data => {
       const vehicleDetails = [];
-      for (let id of vehicleID) {
-        const { plate, manufacturer } = await getVehicle(id);
-        const details = {
-          plate: plate,
-          manufacturer: manufacturer
-        };
-        vehicleDetails.push(details);
+      console.log(data.name);
+      for (let id of data.vehicleID) {
+        getVehicle(id).then(item => {
+          const details = {
+            plate: item.plate,
+            manufacturer: item.manufacturer
+          };
+          vehicleDetails.push(details);
+        })
       }
 
       //Structure Output
-      const driver = {};
-      driver.fullName = name;
-      driver.id = key;
-      driver.phone = phone;
-      driver.noOfTrips = value.noOfCashTrips + value.noOfNonCashTrips;
-      driver.noOfVehicles = vehicleID.length;
-      driver.vehicles = vehicleDetails;
-      driver.noOfCashTrips = value.noOfCashTrips;
-      driver.noOfNonCashTrips = value.noOfNonCashTrips;
-      driver.totalAmountEarned =
+      const driver = {
+        fullName: data.name,
+        id: key,
+        phone: data.phone,
+        noOfTrips: value.noOfCashTrips + value.noOfNonCashTrips,
+        noOfVehicles: data.vehicleID.length,
+        vehicles: vehicleDetails,
+        noOfCashTrips: value.noOfCashTrips,
+        noOfNonCashTrips: value.noOfNonCashTrips,
+        totalAmountEarned:
         Number(value.cashAmountEarned.toFixed(2)) +
-        Number(value.nonCashAmountEarned.toFixed(2));
-      driver.totalCashAmount = Number(value.cashAmountEarned.toFixed(2));
-      driver.totalNonCashAmount = Number(value.nonCashAmountEarned.toFixed(2));
-      driver.trips = value.trips;
+        Number(value.nonCashAmountEarned.toFixed(2)),
+        totalCashAmount: Number(value.cashAmountEarned.toFixed(2)),
+        totalNonCashAmount: Number(value.nonCashAmountEarned.toFixed(2)),
+        trips = value.trips,
+      };
 
       //push into report
       report.push(driver);
-    }
-  } catch (err) {}
+    }).catch(err => {})
+  }
 
   // console.log(report);
   return report;
