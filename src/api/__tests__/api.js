@@ -27,39 +27,38 @@ describe('API', () => {
   test('getDriver returns valid data', async () => {
     const driverIDs = Object.keys(drivers);
 
-    for (driverID of driverIDs) {
-      const driver = await getDriver(driverID);
-      expect(driver).toMatchObject({
-        vehicleID: expect.any(Array),
-        name: expect.any(String),
-        gender: expect.any(String),
-        agent: expect.any(String),
-        email: expect.any(String),
-        phone: expect.any(String),
-        DOB: expect.any(String),
-        address: expect.any(String)
-      });
+    return Promise.all(
+      driverIDs.map(driverID => {
+        const driver = getDriver(driverID);
 
-      // Check that the Date is a valid.
-      expect(isNaN(new Date(driver.DOB))).toBeFalsy();
-    }
+        return expect(driver).resolves.toMatchObject({
+          vehicleID: expect.any(Array),
+          name: expect.any(String),
+          gender: expect.any(String),
+          agent: expect.any(String),
+          email: expect.any(String),
+          phone: expect.any(String),
+          DOB: expect.any(String),
+          address: expect.any(String)
+        });
+      })
+    );
   });
 
   test('getVehicle returns valid data', async () => {
     const vehicleIDs = Object.keys(vehicles);
 
-    for (vehicleID of vehicleIDs) {
-      const vehicle = await getVehicle(vehicleID);
+    return Promise.all(
+      vehicleIDs.map(vehicleID => {
+        const vehicle = getVehicle(vehicleID);
 
-      expect(vehicle).toMatchObject({
-        manufacturer: expect.any(String),
-        plate: expect.any(String),
-        acquired: expect.any(String),
-        acquiredNew: expect.any(Boolean)
-      });
-
-      // Check that the Date is a valid.
-      expect(isNaN(new Date(vehicle.acquired))).toBeFalsy();
-    }
+        return expect(vehicle).resolves.toMatchObject({
+          manufacturer: expect.any(String),
+          plate: expect.any(String),
+          acquired: expect.any(String),
+          acquiredNew: expect.any(Boolean)
+        });
+      })
+    );
   });
 });
