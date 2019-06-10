@@ -1,10 +1,8 @@
 const { analysis, driverReport } = require('../src/index');
 
 describe('analysis spec', () => {
-  test('matches the required data format', async () => {
-    const data = await analysis();
-
-    expect(data).toEqual({
+  test('matches the required data format', () => {
+    return expect(analysis()).resolves.toEqual({
       noOfCashTrips: expect.any(Number),
       noOfNonCashTrips: expect.any(Number),
       billedTotal: expect.any(Number),
@@ -28,18 +26,32 @@ describe('analysis spec', () => {
     });
   });
 
-  test('analysis solution', async () => {
-    const data = await analysis();
-
-    expect(data).toMatchObject({
+  test('analysis solution', () => {
+    return expect(analysis()).resolves.toEqual({
       noOfCashTrips: 26,
       noOfNonCashTrips: 24,
       billedTotal: 128224.69,
       cashBilledTotal: 69043.8,
-      nonCashBilledTotal: 59180.89
+      nonCashBilledTotal: 59180.89,
+      noOfDriversWithMoreThanOneVehicle: 3,
+      mostTripsByDriver: {
+        name: 'Bush Gibbs',
+        email: 'bushgibbs@example.com',
+        phone: '+234 808-204-2520',
+        noOfTrips: 7,
+        totalAmountEarned: 17656.46
+      },
+      highestEarningDriver: {
+        name: 'Hughes Strickland',
+        email: 'hughesstrickland@example.com',
+        phone: '+234 808-084-4833',
+        noOfTrips: 7,
+        totalAmountEarned: 24508.77
+      }
     });
   });
 });
+
 
 describe('driver report array to have length of drivers Api with correct ID', () => {
   test('expects this to return 9', async () => {
