@@ -17,18 +17,18 @@ async function analysis() {
   totalTrips.forEach(trips => {
     if (trips.isCash) {
       noOfCashTrips++;
-      cashBilledTotal += Number(String(trips.billedAmount).replace(/,/g, ""));
+      cashBilledTotal += Number(String(trips.billedAmount).replace(/,/g, ''));
     }
     uniqueDriverID.add(trips.driverID);
     if (!drivers.has(trips.driverID)) {
       drivers.set(trips.driverID, {
         noOfTrips: 1,
-        earnings: Number(String(trips.billedAmount).replace(/,/g, ""))
+        earnings: Number(String(trips.billedAmount).replace(/,/g, ''))
       });
     } else {
       let { noOfTrips, earnings } = drivers.get(trips.driverID);
       noOfTrips++;
-      earnings += Number(String(trips.billedAmount).replace(/,/g, ""));
+      earnings += Number(String(trips.billedAmount).replace(/,/g, ''));
       drivers.set(trips.driverID, { noOfTrips, earnings });
     }
   });
@@ -38,7 +38,7 @@ async function analysis() {
 
   // get the total billed trips
   let billedTotal = totalTrips.reduce((total, trip) => {
-    return total + Number(String(trip["billedAmount"]).replace(/,/g, ""));
+    return total + Number(String(trip["billedAmount"]).replace(/,/g, ''));
   }, 0);
 
   // get total non cash billed total
@@ -115,7 +115,7 @@ async function driverReport() {
         driverDetails.set(trip.driverID, {
           noOfCashTrips: 1,
           noOfNonCashTrips: 0,
-          cashAmountEarned: Number(String(trip.billedAmount).replace(/,/g, "")),
+          cashAmountEarned: Number(String(trip.billedAmount).replace(/,/g, '')),
           nonCashAmountEarned: 0,
           trips: [obj]
         });
@@ -125,7 +125,7 @@ async function driverReport() {
           noOfNonCashTrips: 1,
           cashAmountEarned: 0,
           nonCashAmountEarned: Number(
-            String(trip.billedAmount).replace(/,/g, "")
+            String(trip.billedAmount).replace(/,/g, '')
           ),
           trips: [obj]
         });
@@ -140,7 +140,7 @@ async function driverReport() {
       } = driverDetails.get(trip.driverID);
       if (trip.isCash) {
         noOfCashTrips++;
-        cashAmountEarned += Number(String(trip.billedAmount).replace(/,/g, ""));
+        cashAmountEarned += Number(String(trip.billedAmount).replace(/,/g, ''));
         trips.push(obj);
         driverDetails.set(trip.driverID, {
           noOfCashTrips,
@@ -152,7 +152,7 @@ async function driverReport() {
       } else {
         noOfNonCashTrips++;
         nonCashAmountEarned += Number(
-          String(trip.billedAmount).replace(/,/g, "")
+          String(trip.billedAmount).replace(/,/g, '')
         );
         trips.push(obj);
         driverDetails.set(trip.driverID, {
