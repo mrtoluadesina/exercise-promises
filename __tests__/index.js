@@ -54,23 +54,20 @@ describe('analysis spec', () => {
 
 
 describe('driver report array to have length of drivers Api with correct ID', () => {
-  test('expects this to return 9', async () => {
-    let result = await driverReport();
-    expect(result).toHaveLength(9);
+  test('expects this to return 9', () => {
+    return expect(driverReport()).resolves.toHaveLength(9);
   });
 });
 
 describe('driver report to be defined', () => {
-  test('expects driverReport to be defined', async () => {
-    await expect(driverReport).toBeDefined();
+  test('expects driverReport to be defined', () => {
+    return expect(driverReport()).resolves.toBeDefined();
   });
 });
 
 describe('driverReport spec', () => {
-  test('matches the required data format', async () => {
-    const data = await driverReport();
-
-    expect(data).toContainEqual({
+  test('matches the required data format', () => {
+    return expect(driverReport()).resolves.toContainEqual({
       fullName: expect.any(String),
       id: expect.any(String),
       phone: expect.any(String),
@@ -86,9 +83,8 @@ describe('driverReport spec', () => {
     });
   });
 
-  test('driverReport solution', async () => {
-    const data = await driverReport();
-    expect(data).toEqual(expect.arrayContaining([
+  test('driverReport solution', () => {
+    return expect(driverReport()).resolves.toEqual(expect.arrayContaining([
       expect.objectContaining({
         fullName: 'Kate Carpenter',
         id: '3539a692-69b6-4b24-89fc-f8b505a1eecd',
