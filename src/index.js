@@ -224,6 +224,20 @@ async function driverReport() {
     })
   })
 
+  const vehicleArrayPromises = arrayVehicle.map(async vehicle => {
+    try {
+      let { plate, manufacturer } = await getVehicle(vehicle.vehicle);
+
+      return {
+        plate,
+        manufacturer,
+        driverID: vehicle.driverID
+      }
+    } catch {}
+  })
+
+  const vehicleArrayResolved = await Promise.all(vehicleArrayPromises);
+
 
 
   return report;
