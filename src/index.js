@@ -183,7 +183,36 @@ async function driverReport() {
     }
   });
 
+  const driverArray = [...driverDetails]
   
+  const driverPromises = driverArray.map(async key => {
+
+    let index = key[0];
+    let value = key[1];
+
+    try {
+      let { name, phone, vehicleID } = await getDriver(index);
+      
+      return {
+        ...key[1],
+        fullName: name,
+        phone, 
+        vehicleID,
+        vehicles: [],
+        noOfTrips: value.noOfCashTrips + value.noOfNonCashTrips,
+        noOfVehicles: vehicleID.length,
+        totalAmountEarned: Number(value.totalCashAmount.toFixed(2)) + Number(value.totalNonCashAmount.toFixed(2)),
+        id: index
+      }
+    } catch (err) {
+      return;
+    }
+  });
+
+  const driverData = await Promise.all(driverPromises);
+
+  
+
   return report;
 }
 module.exports = { analysis, driverReport };
