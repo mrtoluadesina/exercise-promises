@@ -211,7 +211,20 @@ async function driverReport() {
 
   const driverData = await Promise.all(driverPromises);
 
-  
+  const filteredDriver = driverData.filter(driver => driver !== undefined)
+
+  const filteredMap = new Map();
+
+  let arrayVehicle = []
+
+  filteredDriver.map(driver => {
+    filteredMap.set(driver.id, driver);
+    return driver.vehicleID.map(vehicle => {
+      arrayVehicle.push({vehicle, driverID: driver.id});
+    })
+  })
+
+
 
   return report;
 }
