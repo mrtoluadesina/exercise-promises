@@ -238,6 +238,13 @@ async function driverReport() {
 
   const vehicleArrayResolved = await Promise.all(vehicleArrayPromises);
 
+  vehicleArrayResolved.map(res => {
+    const { vehicles } = filteredMap.get(res.driverID);
+    delete filteredMap.get(res.driverID).vehicleID;
+    vehicles.push({ plate: res.plate, manufacturer: res.manufacturer })
+    filteredMap.set(res.driverID, {...filteredMap.get(res.driverID), vehicles}); 
+  })
+
 
 
   return report;
