@@ -245,7 +245,7 @@ async function driverReport() {
     filteredMap.set(res.driverID, {...filteredMap.get(res.driverID), vehicles}); 
   })
 
-
+  const report = [...filteredMap.values()];
 
   return report;
 }
